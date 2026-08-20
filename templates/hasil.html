@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeteksiBerita – Hasil Analisis</title>
+    <meta name="description"
+        content="Hasil analisis deteksi clickbait dan hoaks berbasis model BART NLP pada berita berbahasa Indonesia.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Background Animasi Partikel -->
+    <div class="bg-animation" id="particles-js"></div>
+
+    <!-- ============================================================
+         NAVBAR
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
+                <i class="fa-solid fa-microchip text-primary me-2"></i>DeteksiBerita
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+    </nav>
+
+    <!-- ============================================================
+         MAIN CONTENT
+    ============================================================ -->
+    <main class="d-flex align-items-start min-vh-100 position-relative z-1 pt-5">
+        <div class="container mt-5 mb-5">
+
+            <!-- ------------------------------------------------
+                 PERINGATAN PLACEHOLDER (hanya muncul jika demo)
+            ------------------------------------------------ -->
+            {% if hasil.is_placeholder %}
+            <div class="alert alert-warning border-warning bg-transparent mx-auto fade-in-up" style="max-width: 960px;">
+                <i class="fa-solid fa-circle-info me-2"></i>
+                <strong>Perhatian:</strong> Ini adalah data demo. Model BART nyata sedang diintegrasikan.
+            </div>
+            {% endif %}
+
+            <div class="row justify-content-center fade-in-up">
+                <div class="col-lg-11 col-xl-10">
+                    <div class="glass-panel p-4 p-md-5">
+
+                        <!-- Header Panel -->
+                        <div
+                            class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+                            <h2 class="m-0">
+                                <i class="fa-solid fa-chart-pie text-primary me-2"></i>
+                                Hasil Analisis
+                            </h2>
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-sm">
+                                <i class="fa-solid fa-rotate-left me-1"></i> Analisis Baru
+                            </a>
+                        </div>
+
+                        <!-- ============================================
+                             BAGIAN 1: INFORMASI ARTIKEL
+                        ============================================ -->
+                        <div
+                            class="article-meta mb-5 p-4 p-md-5 rounded-4 bg-dark bg-opacity-50 border border-secondary border-opacity-25 shadow-sm position-relative overflow-hidden">
+                            <!-- Aksen Dekoratif -->
+                            <div class="position-absolute top-0 start-0 w-100 bg-primary opacity-25"
+                                style="height: 4px;"></div>
+
+                            <!-- Judul Berita -->
+                            <h5 class="text-primary mb-2 fw-semibold" style="letter-spacing: 1px; font-size: 0.9rem;">
+                                <i class="fa-solid fa-newspaper me-1"></i> Judul Berita
+                            </h5>
+                            <h3 class="fw-bolder mb-4 lh-base text-white"
+                                style="font-size: clamp(1.5rem, 2.5vw, 2rem);">{{ hasil.judul }}</h3>
+
+                            <!-- Sumber URL -->
+                            <h5 class="text-primary mb-2 fw-semibold" style="letter-spacing: 1px; font-size: 0.9rem;">
+                                <i class="fa-solid fa-link me-1"></i> Sumber URL
+                            </h5>
+                            <a href="{{ hasil.url }}" target="_blank" rel="noopener noreferrer"
+                                class="text-break text-info text-decoration-none d-inline-flex align-items-center mb-4 px-3 py-2 bg-info bg-opacity-10 rounded-3 border border-info border-opacity-25 shadow-sm">
+                                <i class="fa-solid fa-external-link-alt me-2"></i>{{ hasil.url }}
+                            </a>
+
+                            <!-- Collapsible: Isi Berita Lengkap -->
+                            <div class="pt-4 border-top border-secondary border-opacity-25 mt-2">
+                                <button class="btn btn-outline-light btn-sm px-4 py-2 rounded-pill shadow-sm"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseScrapedContent"
+                                    aria-expanded="false" aria-controls="collapseScrapedContent" id="btnToggleContent">
+                                    <i class="fa-solid fa-file-alt me-1"></i>
+                                    Tampilkan Teks Hasil Scraping
+                                </button>
+
+                                <div class="collapse mt-3" id="collapseScrapedContent">
+                                    <div class="card card-body bg-black bg-opacity-50 border-secondary border-opacity-50 text-light rounded-4 p-4"
+                                        style="max-height: 300px; overflow-y: auto;">
+                                        {% if hasil.isi_teks %}
+                                        <p class="mb-0 fs-6 lh-lg text-white-50" style="white-space: pre-wrap;">{{
+                                            hasil.isi_teks }}</p>
+                                        {% elif hasil.isi_preview %}
+                                        <p class="mb-0 fs-6 lh-lg text-white-50">{{ hasil.isi_preview }}</p>
+                                        {% else %}
+                                        <p class="mb-0 fs-6 text-muted fst-italic">
+                                            Teks konten tidak tersedia.
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /article-meta -->
+
+                        <!-- ============================================
+                             BAGIAN 2: GRID KARTU PREDIKSI
+                        ============================================ -->
+
+                        <!--
+                            Tentukan warna dan status untuk tiap kartu.
+                            Jika data nyata (bukan placeholder), ambil dari model.
+                            Jika placeholder/demo, tampilkan warna netral.
+                        -->
+                        {% if hasil.is_placeholder %}
+                        {% set cb_class = 'warning' %}
+                        {% set cb_status = 'Demo' %}
+                        {% set hx_class = 'warning' %}
+                        {% set hx_status = 'Demo' %}
+                        {% else %}
+                        {% set cb_is_clickbait = ('Non' not in hasil.clickbait.status) %}
+                        {% set cb_class = 'danger' if cb_is_clickbait else 'success' %}
+                        {% set cb_status = hasil.clickbait.status %}
+                        {% set hx_is_hoax = ('Non' not in hasil.hoax.status) %}
+                        {% set hx_class = 'danger' if hx_is_hoax else 'success' %}
+                        {% set hx_status = hasil.hoax.status %}
+                        {% endif %}
+
+                        <div class="row g-4 mb-5">
+
+                            <!-- ------------------------------------------
+                                 KARTU 1: Deteksi Clickbait
+                            ------------------------------------------ -->
+                            <div class="col-md-6">
+                                <div
+                                    class="prediction-card p-3 rounded-4 border border-{{ cb_class }} border-opacity-50
+                                            position-relative overflow-hidden d-flex flex-column bg-dark bg-opacity-50 shadow-lg h-100 justify-content-start">
+                                    <div class="card-glow bg-{{ cb_class }} opacity-25"></div>
+
+                                    <!-- Label judul kartu -->
+                                    <h5 class="text-muted mb-2 text-center fw-bold text-uppercase"
+                                        style="font-size: 0.85rem; letter-spacing: 1px;">🎯 Model Deteksi Clickbait</h5>
+
+                                    <!-- Badge status -->
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div
+                                            class="status-badge bg-{{ cb_class }} bg-opacity-25 text-white
+                                                    border border-{{ cb_class }} rounded-pill px-4 py-2
+                                                    d-inline-flex align-items-center justify-content-center fw-bolder fs-5 shadow-sm text-center">
+                                            {% if cb_is_clickbait %}
+                                                <span class="bg-warning text-dark px-2 rounded shadow-sm">{{ cb_status }}</span>
+                                            {% else %}
+                                                {{ cb_status }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <!-- Kotak judul yang dianalisis -->
+                                    <div class="flex-grow-1 d-flex justify-content-center align-items-center
+                                                text-center mb-3 p-4 rounded-4 bg-{{ cb_class }} bg-gradient
+                                                shadow pred-box">
+                                        <p class="mb-0 lh-base text-white fw-semibold pred-title-text">
+                                            {% if not hasil.is_placeholder and hasil.clickbait.judul_analyzed %}
+                                            "{{ hasil.clickbait.judul_analyzed | safe }}"
+                                            {% else %}
+                                            (judul berita akan ditampilkan di sini)
+                                            {% endif %}
+                                        </p>
+                                    </div>
+
+                                    <!-- Probabilitas Teks -->
+                                    <div class="mt-auto pt-3 border-top border-secondary border-opacity-25 text-center">
+                                        <p class="small text-muted mb-1 text-uppercase fw-semibold"
+                                            style="letter-spacing: 1.5px; font-size: 0.75rem;">Probabilitas</p>
+                                        <h3
+                                            class="fw-bolder text-{{ cb_class }} mb-0 pred-prob-text glow-text-{{ cb_class }}">
+                                            {{ hasil.clickbait.confidence }}%</h3>
+                                    </div>
+                                </div>
+                            </div><!-- /col clickbait -->
+
+                            <!-- ------------------------------------------
+                                 KARTU 2: Deteksi Hoaks
+                            ------------------------------------------ -->
+                            <div class="col-md-6">
+                                <div
+                                    class="prediction-card p-3 rounded-4 border border-{{ hx_class }} border-opacity-50
+                                            position-relative overflow-hidden d-flex flex-column bg-dark bg-opacity-50 shadow-lg h-100 justify-content-start">
+                                    <div class="card-glow bg-{{ hx_class }} opacity-25"></div>
+
+                                    <h5 class="text-muted mb-2 text-center fw-bold text-uppercase"
+                                        style="font-size: 0.85rem; letter-spacing: 1px;">🛡️ Model Deteksi Hoaks</h5>
+
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div
+                                            class="status-badge bg-{{ hx_class }} bg-opacity-25 text-white
+                                                    border border-{{ hx_class }} rounded-pill px-4 py-2
+                                                    d-inline-flex align-items-center justify-content-center fw-bolder fs-5 shadow-sm text-center">
+                                            {% if hx_is_hoax %}
+                                                <span class="bg-warning text-dark px-2 rounded shadow-sm">{{ hx_status }}</span>
+                                            {% else %}
+                                                {{ hx_status }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <!-- Kotak cuplikan isi berita yang dianalisis -->
+                                    <div class="flex-grow-1 d-flex justify-content-center align-items-start
+                                                text-start mb-3 p-4 rounded-4 bg-{{ hx_class }} bg-gradient
+                                                shadow pred-box-overflow">
+                                        <p class="mb-0 lh-base text-white pred-snippet-text">
+                                            {% if not hasil.is_placeholder and hasil.hoax.isi_analyzed %}
+                                            {{ hasil.hoax.isi_analyzed | safe }}
+                                            {% else %}
+                                            (cuplikan isi berita akan ditampilkan di sini)
+                                            {% endif %}
+                                        </p>
+                                    </div>
+
+                                    <!-- Probabilitas Teks -->
+                                    <div class="mt-auto pt-3 border-top border-secondary border-opacity-25 text-center">
+                                        <p class="small text-muted mb-1 text-uppercase fw-semibold"
+                                            style="letter-spacing: 1.5px; font-size: 0.75rem;">Probabilitas</p>
+                                        <h3
+                                            class="fw-bolder text-{{ hx_class }} mb-0 pred-prob-text glow-text-{{ hx_class }}">
+                                            {{ hasil.hoax.confidence }}%</h3>
+                                    </div>
+                                </div>
+                            </div><!-- /col hoax -->
+
+                        </div><!-- /row g-4 -->
+
+                    </div><!-- /glass-panel -->
+                </div><!-- /col-lg -->
+            </div><!-- /row -->
+
+        </div><!-- /container -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-3 text-center glass-footer position-relative z-1 mt-auto">
+        <div class="container">
+            <span class="text-muted">© 2026 DeteksiBerita. Semua hak dilindungi.</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <!-- Script kecil: ubah teks tombol saat collapsible dibuka/tutup -->
+    <script>
+        const collapseEl = document.getElementById('collapseScrapedContent');
+        const btnToggle = document.getElementById('btnToggleContent');
+
+        if (collapseEl && btnToggle) {
+            collapseEl.addEventListener('show.bs.collapse', () => {
+                btnToggle.innerHTML = '<i class="fa-solid fa-eye-slash me-1"></i> Sembunyikan Teks';
+            });
+            collapseEl.addEventListener('hide.bs.collapse', () => {
+                btnToggle.innerHTML = '<i class="fa-solid fa-file-alt me-1"></i> Tampilkan Teks Hasil Scraping';
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeteksiBerita - Home</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation" id="particles-js"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
+                <i class="fa-solid fa-microchip text-primary me-2"></i>DeteksiBerita
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+    </nav>
+
+    <!-- Main Content (Matching Wireframe) -->
+    <main class="d-flex align-items-center min-vh-100 position-relative z-1">
+        <div class="container text-center">
+            
+            {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show mx-auto custom-alert" role="alert" style="max-width: 600px;">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            <div class="content-wrapper glass-panel p-5 mx-auto fade-in-up w-100" style="max-width: 900px;">
+                <h1 class="main-title mb-4">Deteksi <span class="text-gradient">Clickbait</span> dan <span class="text-gradient">Hoaks</span> Secara Otomatis</h1>
+                <p class="subtitle mb-5 text-muted">Membantu mengidentifikasi judul clickbait dan konten hoaks untuk memastikan informasi berita lebih terpercaya.</p>
+                
+                <form action="{{ url_for('detect') }}" method="POST" class="search-form" id="detectionForm">
+                    <div class="input-group input-group-lg shadow-glow">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted">
+                            <i class="fa-solid fa-link"></i>
+                        </span>
+                        <input type="url" class="form-control border-start-0 ps-0" name="url" id="urlInput" placeholder="Masukkan URL berita yang ingin dianalisis..." required autocomplete="off">
+                        <button class="btn btn-primary btn-detect px-4 fw-bold" type="submit" id="btnSubmit">
+                            Mulai Deteksi <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="loadingIndicator" class="d-none mt-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-primary fw-semibold animate-pulse">Sistem sedang menganalisis berita...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-3 text-center fixed-bottom glass-footer position-relative z-1">
+        <div class="container">
+            <span class="text-muted">© 2026 DeteksiBerita. Semua hak dilindungi.</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Particles JS -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

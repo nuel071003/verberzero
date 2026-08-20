@@ -1,0 +1,285 @@
+:root {
+    --bg-primary: #0a0a16; 
+    --bg-secondary: #121226;
+    --accent-primary: #00f2fe; 
+    --accent-secondary: #4facfe;
+    --glass-bg: rgba(20, 20, 40, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Background Particles */
+.bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    background: radial-gradient(circle at center, #121226 0%, #0a0a16 100%);
+}
+
+/* Glassmorphism Classes */
+.glass-navbar {
+    background: rgba(10, 10, 22, 0.8) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.glass-footer {
+    background: rgba(10, 10, 22, 0.8) !important;
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--glass-border);
+}
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-panel:hover {
+    box-shadow: 0 8px 32px 0 rgba(0, 242, 254, 0.1);
+}
+
+/* Typography & Colors */
+.text-gradient {
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.main-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* Inputs & Forms */
+.search-form {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.form-control {
+    background-color: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--glass-border);
+    color: #fff !important;
+}
+
+.form-control:focus {
+    background-color: rgba(255,255,255,0.08) !important;
+    box-shadow: none;
+    border-color: var(--accent-secondary);
+}
+
+.input-group-text {
+    border-color: var(--glass-border);
+    background-color: rgba(255,255,255,0.05);
+}
+
+.btn-detect {
+    background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-detect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+}
+
+/* Custom Alert */
+.custom-alert {
+    background: rgba(220, 53, 69, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #ff6b6b;
+}
+
+/* Features (About page) */
+.feature-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s;
+}
+
+.feature-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Prediction Cards (Hasil page) */
+.prediction-card {
+    background: rgba(0,0,0,0.2);
+}
+
+.card-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    filter: blur(60px);
+    opacity: 0.15;
+    z-index: 0;
+    border-radius: 50%;
+}
+
+.prediction-card > :not(.card-glow) {
+    position: relative;
+    z-index: 1;
+}
+
+/* Animations */
+.fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2rem;
+    }
+    .input-group {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100%;
+    }
+    .input-group > .form-control {
+        width: 100% !important;
+        border-radius: 0.375rem !important;
+        margin-bottom: 12px !important;
+        border: 1px solid var(--glass-border) !important;
+        padding: 0.75rem 1rem !important;
+        min-height: 52px;
+    }
+    .input-group > .input-group-text {
+        display: none !important;
+    }
+    .input-group > .btn {
+        width: 100% !important;
+        border-radius: 0.375rem !important;
+        margin-left: 0 !important;
+        min-height: 52px;
+    }
+}
+
+/* Custom styles previously inline in HTML */
+.pred-box {
+    min-height: 130px;
+}
+.pred-box-overflow {
+    min-height: 130px;
+    overflow: hidden;
+}
+.pred-title-text {
+    font-size: clamp(16px, 2.5vw, 20px);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.pred-snippet-text {
+    font-size: clamp(14px, 2vw, 16px);
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.pred-prob-text {
+    font-size: 2.5rem;
+}
+.glow-text-danger { text-shadow: 0 0 15px var(--bs-danger); }
+.glow-text-success { text-shadow: 0 0 15px var(--bs-success); }
+.glow-text-warning { text-shadow: 0 0 15px var(--bs-warning); }
+.glow-text-secondary { text-shadow: 0 0 15px var(--bs-secondary); }
+
+/* Highlight kuning untuk teks clickbait / hoax */
+mark {
+    background-color: #ffd60a;
+    color: #000;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+/* Mark di dalam pred-box agar kontras tetap baik */
+.pred-box mark,
+.pred-box-overflow mark {
+    background-color: #ffd60a;
+    color: #1a1a2e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    box-shadow: 0 1px 4px rgba(255, 214, 10, 0.3);
+}
+
+/* Panel Kesimpulan */
+.conclusion-panel {
+    background: linear-gradient(135deg, rgba(20, 20, 50, 0.8), rgba(30, 30, 60, 0.6));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.conclusion-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+}
+
+.conclusion-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.conclusion-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.85);
+}
